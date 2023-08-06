@@ -1,6 +1,11 @@
 import { InputBase, alpha, styled } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import { useState } from 'react';
 
+type tSearch = {
+	value: string;
+	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+};
 const Search = styled('div')(({ theme }) => ({
 	position: 'relative',
 	borderRadius: theme.shape.borderRadius,
@@ -33,22 +38,26 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 		padding: theme.spacing(1, 1, 1, 0),
 		// vertical padding + font size from searchIcon
 		paddingRight: `calc(1em + ${theme.spacing(4)})`,
-		paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+		paddingLeft: `calc(1em + ${theme.spacing(1)})`,
 		transition: theme.transitions.create('width'),
 		width: '100%',
-		// [theme.breakpoints.up('sm')]: {
-		// 	width: '12ch',
-		// 	'&:focus': {
-		// 		width: '20ch',
-		// 	},
-		// },
 	},
 }));
 
-const SearchInput = () => {
+const SearchInput = ({ value, onChange }: tSearch) => {
+	const [searchValue, setSearchValue] = useState(value);
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setSearchValue(e.target.value);
+		onChange(e);
+	};
 	return (
 		<Search>
-			<StyledInputBase placeholder='Search clients...' inputProps={{ 'aria-label': 'search' }} />
+			<StyledInputBase
+				placeholder='Search clients...'
+				inputProps={{ 'aria-label': 'search' }}
+				value={searchValue}
+				onChange={handleChange}
+			/>
 			<SearchIconWrapper>
 				<SearchIcon />
 			</SearchIconWrapper>
