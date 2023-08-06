@@ -1,4 +1,4 @@
-import { Dialog, DialogActions, DialogContent, styled, useMediaQuery, useTheme } from '@mui/material';
+import { Dialog, styled, useMediaQuery, useTheme } from '@mui/material';
 import { useEffect, useState } from 'react';
 import CustomDialogTitle from './CustomDialogTitle';
 

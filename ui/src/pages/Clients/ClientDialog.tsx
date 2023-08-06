@@ -229,6 +229,7 @@ const ClientDialog = (props: tDialog) => {
 								optional?: React.ReactNode;
 								error?: boolean;
 							} = {};
+							// TODO: stepper error
 							// if (fieldError.length > 0) {
 							// 	labelProps.optional = (
 							// 		<Typography variant='caption' color='error'>
@@ -248,7 +249,13 @@ const ClientDialog = (props: tDialog) => {
 				{renderStepsContent()}
 			</DialogContent>
 			<DialogActions>
-				<Box sx={activeStep !== 0 ? { width: '100%', display: 'flex', justifyContent: 'space-between' } : null}>
+				<Box
+					sx={
+						activeStep !== 0
+							? { width: '100%', display: 'flex', justifyContent: 'space-between', padding: '16px' }
+							: { padding: '16px' }
+					}
+				>
 					{activeStep !== 0 && (
 						<Button sx={{ textTransform: 'unset' }} onClick={handleBack}>
 							<ArrowBackSharpIcon fontSize='small' sx={{ paddingRight: '2px' }} />

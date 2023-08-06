@@ -10,6 +10,7 @@ import ClientDialog from './ClientDialog';
 function Clients() {
 	const { state, dispatch } = useContext(StateContext);
 	const { clients } = state;
+	const [searched, setSearched] = useState<string>('');
 	const [clientDialogOpen, setClientDialogOpen] = useState(false);
 
 	const openClientDialog = () => {
@@ -33,14 +34,14 @@ function Clients() {
 				Clients
 			</Typography>
 			<Box sx={{ display: 'flex', justifyContent: 'space-between', margin: 'auto', marginTop: 3 }}>
-				<SearchInput />
+				<SearchInput value={searched} onChange={(e) => setSearched(e.target.value)} />
 				<Button variant='contained' sx={{ textTransform: 'unset' }} onClick={openClientDialog}>
 					Create new client
 				</Button>
 			</Box>
 			<ClientDialog open={clientDialogOpen} handleClose={setClientDialogOpen} handleSave={onNewClientSave} />
 			<Paper sx={{ margin: 'auto', marginTop: 3 }}>
-				<ClientTable clients={clients} />
+				<ClientTable clients={clients} filter={searched} />
 			</Paper>
 		</Page>
 	);
