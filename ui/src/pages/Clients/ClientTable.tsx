@@ -7,9 +7,10 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import ClientRow from './ClientRow';
 import { TablePagination } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-export default function BasicTable({ clients }: { clients: IClient[] }) {
+export default function BasicTable({ clients, filter = '' }: { clients: IClient[]; filter: string }) {
+	const [rows, setRows] = useState<IClient[]>(clients);
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(5);
 	const PAGE_OPTIONS = [5, 10, 25];
@@ -21,6 +22,15 @@ export default function BasicTable({ clients }: { clients: IClient[] }) {
 		setRowsPerPage(parseInt(event.target.value, 10));
 		setPage(0);
 	};
+
+	// Filter list when search query is updated
+	useEffect(() => {
+		const filteredRows = clients.filter((row) => {
+			const name = `${row.firstName} ${row.lastName}`;
+			return name.toLowerCase().includes(filter.toLowerCase());
+		});
+		setRows(filteredRows);
+	}, [clients, filter]);
 
 	return (
 		<>
@@ -35,13 +45,13 @@ export default function BasicTable({ clients }: { clients: IClient[] }) {
 					</TableHead>
 					<TableBody>
 						{(rowsPerPage > 0
-							? clients.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-							: clients
+							? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+							: rows
 						).map((client) => (
 							<ClientRow key={client.id} client={client} />
 						))}
-						{!clients ||
-							(!clients.length && (
+						{!rows ||
+							(!rows.length && (
 								<TableRow sx={{ padding: 3 }}>
 									<TableCell component='th' scope='row'>
 										No clients
@@ -51,11 +61,11 @@ export default function BasicTable({ clients }: { clients: IClient[] }) {
 					</TableBody>
 				</Table>
 			</TableContainer>
-			{clients.length > PAGE_OPTIONS[0] && (
+			{rows.length > PAGE_OPTIONS[0] && (
 				<TablePagination
 					rowsPerPageOptions={PAGE_OPTIONS}
 					component='div'
-					count={clients.length}
+					count={rows.length}
 					rowsPerPage={rowsPerPage}
 					page={page}
 					onPageChange={handleChangePage}
